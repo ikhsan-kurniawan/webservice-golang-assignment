@@ -57,7 +57,7 @@ func getPeserta(peserta []Biodata, cari string) {
 	}
 
 	if !adaPeserta {
-		fmt.Printf("Nomor peserta %s tidak ditemukan", os.Args[1])
+		fmt.Printf("Nomor peserta %s tidak ditemukan", cari)
 	}
 
 }
