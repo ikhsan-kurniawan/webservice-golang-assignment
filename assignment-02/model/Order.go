@@ -1,9 +1,12 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type Order struct {
-	OrderId      int `json:"order_id"`
-	CustomerName string `json:"customer_name"`
-	OrderedAt    time.Time `json:"ordered_at"`
+	OrderId      int `json:"orderId"`
+	CustomerName string `json:"customerName"`
+	OrderedAt    time.Time `json:"orderedAt"`
+	Items []Item `json:"items"`
 }
