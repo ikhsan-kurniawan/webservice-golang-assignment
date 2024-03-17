@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Status</title>
+  </head>
+  <body>
+    <h1>Status</h1>
+    <div id="status"></div>
+
+    <script>
+      fetch("/status")
+        .then((response) => response.json())
+        .then((data) => updateStatusView(data))
+        .catch((error) => console.error("Error:", error));
+
+      function getStatusStatus(water, wind) {
+        var waterStatus, windStatus;
+
+        if (water < 5) {
+          waterStatus = "Aman";
+        } else if (water >= 6 && water <= 8) {
+          waterStatus = "Siaga";
+        } else {
+          waterStatus = "Bahaya";
+        }
+
+        if (wind < 6) {
+          windStatus = "Aman";
+        } else if (wind >= 7 && wind <= 15) {
+          windStatus = "Siaga";
+        } else {
+          windStatus = "Bahaya";
+        }
+
+        return {
+          water: water,
+          waterStatus: waterStatus,
+          wind: wind,
+          windStatus: windStatus,
+        };
+      }
+
+      function updateStatusView(data) {
+        var water = data.status.water;
+        var wind = data.status.wind;
+
+        var status = getStatusStatus(water, wind);
+
+        var statusDiv = document.getElementById("status");
+        statusDiv.innerHTML = `
+                <p>Water: ${status.water} (${status.waterStatus})</p>
+                <p>Wind: ${status.wind} (${status.windStatus})</p>
+            `;
+      }
+
+      (function () {
+        setTimeout(function () {
+          window.location.reload();
+        }, 15000); // 5000 milidetik = 5 detik
+      })();
+    </script>
+  </body>
+</html>
