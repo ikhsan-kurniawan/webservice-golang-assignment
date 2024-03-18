@@ -1,8 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"html/template"
 	"math/rand"
 	"net/http"
 )
@@ -19,17 +19,15 @@ type Response struct {
 
 func main() {
 	http.HandleFunc("/", home)
-	http.HandleFunc("/status", getStatus)
 
 	fmt.Println("Application is listening on port", PORT)
 	http.ListenAndServe(PORT, nil)
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "index.html")
-}
 
-func getStatus(w http.ResponseWriter, r *http.Request) {
+	tpl := template.Must(template.ParseFiles("index.html"))
+
 	water := rand.Intn(100) + 1
 	wind := rand.Intn(100) + 1
 
@@ -38,11 +36,11 @@ func getStatus(w http.ResponseWriter, r *http.Request) {
 		Wind:  wind,
 	}
 
-	response := Response{
+	response := Response {
 		Status: status,
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	tpl.Execute(w, response)
+	return
 }
 

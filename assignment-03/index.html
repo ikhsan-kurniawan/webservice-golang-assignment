@@ -55,9 +55,14 @@
                     <div class="d-flex justify-content-between mb-4 pb-2">
                       <div>
                         <h2 class="display-2">
-                          <strong id="water"></strong> <strong>m</strong>
+                          <strong id="water">{{ .Status.Water }}</strong
+                          ><strong> m</strong>
                         </h2>
-                        <p class="text-muted mb-0 fs-4" id="waterStatus"></p>
+                        <p class="text-muted mb-0 fs-4" id="waterStatus">
+                          {{ if lt .Status.Water 5 }} Aman {{ else if and (ge
+                          .Status.Water 6) (le .Status.Water 8) }} Siaga {{ else
+                          }} Bahaya {{ end }}
+                        </p>
                       </div>
                       <div>
                         <img
@@ -79,9 +84,14 @@
                     <div class="d-flex justify-content-between mb-4 pb-2">
                       <div>
                         <h2 class="display-2">
-                          <strong id="wind"></strong> <strong>m/s</strong>
+                          <strong id="wind">{{ .Status.Wind }}</strong
+                          ><strong> m/s</strong>
                         </h2>
-                        <p class="text-muted mb-0 fs-4" id="windStatus"></p>
+                        <p class="text-muted mb-0 fs-4" id="windStatus">
+                          {{ if lt .Status.Wind 6 }} Aman {{ else if and (ge
+                          .Status.Wind 7) (le .Status.Wind 15) }} Siaga {{ else
+                          }} Bahaya {{ end }}
+                        </p>
                       </div>
                       <div>
                         <img
@@ -100,54 +110,6 @@
     </section>
 
     <script>
-      fetch("/status")
-        .then((response) => response.json())
-        .then((data) => updateStatusView(data))
-        .catch((error) => console.error("Error:", error));
-
-      function getStatusStatus(water, wind) {
-        var waterStatus, windStatus;
-
-        if (water < 5) {
-          waterStatus = "Aman";
-        } else if (water >= 6 && water <= 8) {
-          waterStatus = "Siaga";
-        } else {
-          waterStatus = "Bahaya";
-        }
-
-        if (wind < 6) {
-          windStatus = "Aman";
-        } else if (wind >= 7 && wind <= 15) {
-          windStatus = "Siaga";
-        } else {
-          windStatus = "Bahaya";
-        }
-
-        return {
-          water: water,
-          waterStatus: waterStatus,
-          wind: wind,
-          windStatus: windStatus,
-        };
-      }
-
-      function updateStatusView(data) {
-        var water = data.status.water;
-        var wind = data.status.wind;
-        var status = getStatusStatus(water, wind);
-
-        var waterElement = document.getElementById("water");
-        var waterStatusElement = document.getElementById("waterStatus");
-        waterElement.textContent = water;
-        waterStatusElement.textContent = status.waterStatus;
-
-        var windElement = document.getElementById("wind");
-        var windStatusElement = document.getElementById("windStatus");
-        windElement.textContent = wind;
-        windStatusElement.textContent = status.windStatus;
-      }
-
       (function () {
         setTimeout(function () {
           window.location.reload();
