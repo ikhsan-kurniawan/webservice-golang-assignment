@@ -42,7 +42,6 @@ func getStatus(w http.ResponseWriter, r *http.Request) {
 		Status: status,
 	}
 
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
