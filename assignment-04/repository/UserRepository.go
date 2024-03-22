@@ -20,3 +20,9 @@ func (ur *userRepository) Register(newUser models.User) (models.User, error) {
 	err := ur.db.Create(&newUser).Error
 	return newUser, err
 }
+
+func (ur *userRepository) Login(user models.User) (models.User, error) {
+	var loginUser models.User
+	err := ur.db.Where("email = ?", user.Email).Take(&loginUser).Error
+	return loginUser, err
+}

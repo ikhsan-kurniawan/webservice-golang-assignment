@@ -18,7 +18,7 @@ func StartApp(db *gorm.DB) *gin.Engine {
 	userRouter := r.Group("/users")
 	{
 		userRouter.POST("/register", userController.UserRegister)
-		// userRouter.POST("/login", controllers.UserLogin)
+		userRouter.POST("/login", userController.UserLogin)
 	}
 
 	// productRouter := r.Group("/products")
