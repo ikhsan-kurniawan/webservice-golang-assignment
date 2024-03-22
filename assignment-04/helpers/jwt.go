@@ -44,7 +44,7 @@ func VerifyToken(c *gin.Context) (interface{}, error) {
 		return []byte(secretKey), nil
 	})
 
-	if _, ok := token.Claims.(jwt.MapClaims); !ok && !token.Valid {
+	if _, ok := token.Claims.(jwt.MapClaims); !ok || !token.Valid {
 		return nil, errResponse
 	}
 

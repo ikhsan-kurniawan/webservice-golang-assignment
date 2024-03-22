@@ -5,7 +5,9 @@ import (
 	"mygram/models"
 	"mygram/repository"
 	"net/http"
+	"strconv"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
 
@@ -91,5 +93,61 @@ func (uc *userController) UserLogin(ctx *gin.Context) {
 		"id": loginUser.ID,
 		"email": loginUser.Email,
 		"token": token,
+	})
+}
+
+func (uc *userController) UpdateUser(ctx *gin.Context) {
+	user := models.User{}
+	userID, err := strconv.Atoi(ctx.Param("userId"))
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	err = ctx.ShouldBindJSON(&user)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": "Bad request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	updatedUser, err := uc.userRepository.Update(user, userID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "Bad request",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"id": updatedUser.ID,
+		"email": updatedUser.Email,
+		"username": updatedUser.Username,
+		"age": updatedUser.Age,
+		"updated_at": updatedUser.UpdatedAt,
+	})
+}
+
+func (uc *userController) DeleteUser(ctx *gin.Context) {
+	userData := ctx.MustGet("userData").(jwt.MapClaims)
+	userID := int(userData["id"].(float64))
+
+	err := uc.userRepository.Delete(userID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Delete error",
+			"message": err.Error(),
+		})
+		return
+	}
+	
+	ctx.JSON(http.StatusOK, gin.H{
+		"message" : "Your account has been successfully deleted",
 	})
 }

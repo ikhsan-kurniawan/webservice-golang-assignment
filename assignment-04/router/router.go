@@ -2,6 +2,7 @@ package router
 
 import (
 	"mygram/controllers"
+	"mygram/middlewares"
 	"mygram/repository"
 
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,9 @@ func StartApp(db *gorm.DB) *gin.Engine {
 	{
 		userRouter.POST("/register", userController.UserRegister)
 		userRouter.POST("/login", userController.UserLogin)
+
+		userRouter.PUT("/:userId", middlewares.Authentication(), middlewares.UserAuthorization(), userController.UpdateUser)
+		userRouter.DELETE("", middlewares.Authentication(), userController.DeleteUser)
 	}
 
 	// productRouter := r.Group("/products")

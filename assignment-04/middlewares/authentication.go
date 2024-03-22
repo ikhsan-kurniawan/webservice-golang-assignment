@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"mygram/helpers"
 	"net/http"
 
@@ -21,7 +20,6 @@ func Authentication() gin.HandlerFunc {
 		}
 
 		ctx.Set("userData", verifyToken)
-		fmt.Println("verifyToken: ", verifyToken)
 		ctx.Next()
 	}
 }
