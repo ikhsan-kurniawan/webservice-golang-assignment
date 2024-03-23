@@ -12,7 +12,9 @@ import (
 func StartApp(db *gorm.DB) *gin.Engine {
 	userRepository := repository.NewUserRepository(db)
 	userController := controllers.NewUserController(userRepository)
-	_ = userController
+
+	photoRepository := repository.NewPhotoRepository(db)
+	photoController := controllers.NewPhotoController(photoRepository)
 
 	r := gin.Default()
 
@@ -24,6 +26,17 @@ func StartApp(db *gorm.DB) *gin.Engine {
 		userRouter.PUT("/:userId", middlewares.Authentication(), middlewares.UserAuthorization(), userController.UpdateUser)
 		userRouter.DELETE("", middlewares.Authentication(), userController.DeleteUser)
 	}
+
+	photoRouter := r.Group("/photos")
+	{
+		photoRouter.Use(middlewares.Authentication())
+		photoRouter.POST("", photoController.CreatePhoto)
+		photoRouter.GET("", photoController.GetPhotos)
+		photoRouter.GET("/:photoId", middlewares.PhotoAuthorization(db), photoController.GetPhotoById)
+		photoRouter.PUT("/:photoId", middlewares.PhotoAuthorization(db), photoController.UpdatePhoto)
+		photoRouter.DELETE("/:photoId", middlewares.PhotoAuthorization(db), photoController.DeletePhoto)
+	}
+
 
 	// productRouter := r.Group("/products")
 	// {

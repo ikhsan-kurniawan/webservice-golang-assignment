@@ -7,8 +7,4 @@ type IUserRepository interface {
 	Login(user models.User) (models.User, error)
 	Update(updatedUser models.User, id int) (models.User, error)
 	Delete(userId int) (error)
-
-	// GetAll() ([]models.User, error)
-	// Update(newUser models.User) (models.User, error)
-	// Delete(id string) error
 }

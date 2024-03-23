@@ -14,9 +14,9 @@ type User struct {
 	Email       string        `gorm:"not null;uniqueIndex" json:"email" valid:"required~email is required,email~Invalid email format"`
 	Password    string        `gorm:"not null" json:"password" valid:"required~password is required,minstringlength(6)~password has to have minimum length of 6 characters"`
 	Age         int           `gorm:"not null" json:"age" valid:"required~age is required,numeric~age must be numeric"`
-	Comment     []Comment     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"comments"`
-	Photo       []Photo       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"photos"`
-	SocialMedia []SocialMedia `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"social_medias"`
+	// Photos       []Photo       `json:"-"`
+	// Comments     []Comment     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"-"`
+	// SocialMedias []SocialMedia `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"-"`
 }
 
 func (user *User) BeforeCreate(tx *gorm.DB) error {

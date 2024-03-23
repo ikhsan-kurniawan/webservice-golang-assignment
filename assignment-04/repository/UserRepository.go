@@ -37,8 +37,7 @@ func (ur *userRepository) Update(updatedUser models.User, id int) (models.User, 
 	existedUser.Email = updatedUser.Email
 	existedUser.Username = updatedUser.Username
 
-	// err = ur.db.Model(&user).Where("id = ?", id).Updates(models.User{Email: updatedUser.Email, Username: updatedUser.Username}).Error
-	err = ur.db.Model(&existedUser).Where("id = ?", id).Updates(&existedUser).Error
+	err = ur.db.Model(&existedUser).Where("id = ?", id).Updates(existedUser).Error
 	if err != nil {
 		return existedUser, err
 	}
@@ -58,5 +57,4 @@ func (ur *userRepository) Delete(userId int) (error) {
 	}
 
 	return nil
-	
 }
