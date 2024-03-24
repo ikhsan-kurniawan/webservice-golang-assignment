@@ -32,7 +32,7 @@ func (pr *photoRepository) GetAll() ([]models.Photo, error) {
 
 func (pr *photoRepository) GetOne(photoId int) (models.Photo, error) {
 	var photo models.Photo
-    if err := pr.db.First(&photo, photoId).Error; err != nil {
+    if err := pr.db.Preload("User").First(&photo, photoId).Error; err != nil {
         return models.Photo{}, err
     }
     return photo, nil

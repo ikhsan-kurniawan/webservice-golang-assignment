@@ -18,3 +18,9 @@ func (socialmedia *SocialMedia) BeforeCreate(tx *gorm.DB) error {
 
 	return err
 }
+
+func (socialmedia *SocialMedia) BeforeUpdate(tx *gorm.DB) error {
+	_, err := govalidator.ValidateStruct(socialmedia)
+
+	return err
+}
