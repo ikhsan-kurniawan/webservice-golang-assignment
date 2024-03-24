@@ -9,7 +9,7 @@ type SocialMedia struct {
 	GormModel
 	Name           string `gorm:"not null" json:"name" valid:"required~name is required"`
 	SocialMediaURL string `gorm:"not null" json:"social_media_url" valid:"required~social_media_url is required"`
-	UserID         uint
+	UserID         uint		`json:"user_id"`
 	User           *User
 }
 

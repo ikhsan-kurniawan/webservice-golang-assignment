@@ -24,7 +24,9 @@ func (smr *socialMediaRepository) Create(newSocialMedia models.SocialMedia) (mod
 func (smr *socialMediaRepository) GetAll() ([]models.SocialMedia, error) {
 	var socialMedias []models.SocialMedia
 
-	if err := smr.db.Preload("User").Find(&socialMedias).Error; err != nil {
+	if err := smr.db.Preload("User", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id, username, email, age")
+	}).Find(&socialMedias).Error; err != nil {
 		return nil, err
 	}
 	return socialMedias, nil
@@ -32,7 +34,9 @@ func (smr *socialMediaRepository) GetAll() ([]models.SocialMedia, error) {
 
 func (smr *socialMediaRepository) GetOne(socialMediaId int) (models.SocialMedia, error) {
 	var socialMedia models.SocialMedia
-	if err := smr.db.Preload("User").First(&socialMedia, socialMediaId).Error; err != nil {
+	if err := smr.db.Preload("User", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id, username, email, age")
+	}).First(&socialMedia, socialMediaId).Error; err != nil {
 		return models.SocialMedia{}, err
 	}
 	return socialMedia, nil

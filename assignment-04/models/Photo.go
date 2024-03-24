@@ -8,9 +8,9 @@ import (
 type Photo struct {
 	GormModel
 	Title    string `gorm:"not null" json:"title" valid:"required~title is required"`
-	Caption  string
+	Caption  string	`json:"caption"`
 	PhotoURL string `gorm:"not null" json:"photo_url" valid:"required~photo_url is required"`
-	UserID   uint
+	UserID   uint	`json:"user_id"`
 	User     *User `gorm:"foreignKey:UserID"`
 	Comments []Comment `json:"-"`
 }

@@ -29,7 +29,9 @@ func (cr *commentRepository) Create(newComment models.Comment) (models.Comment, 
 func (cr *commentRepository) GetAll() ([]models.Comment, error) {
 	var comments []models.Comment
 
-	if err := cr.db.Preload("User").Preload("Photo").Find(&comments).Error; err != nil {
+	if err := cr.db.Preload("User", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id, username, email, age")
+	}).Preload("Photo").Find(&comments).Error; err != nil {
 		return nil, err
 	}
 	return comments, nil
@@ -37,7 +39,9 @@ func (cr *commentRepository) GetAll() ([]models.Comment, error) {
 
 func (cr *commentRepository) GetOne(commentId int) (models.Comment, error) {
 	var comment models.Comment
-	if err := cr.db.Preload("User").Preload("Photo").First(&comment, commentId).Error; err != nil {
+	if err := cr.db.Preload("User", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id, username, email, age")
+	}).Preload("Photo").First(&comment, commentId).Error; err != nil {
 		return models.Comment{}, err
 	}
 	return comment, nil

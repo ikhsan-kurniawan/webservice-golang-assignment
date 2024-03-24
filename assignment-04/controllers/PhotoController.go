@@ -45,14 +45,7 @@ func (pc *photoController) CreatePhoto(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"id": createdPhoto.ID,
-		"title": createdPhoto.Title,
-		"caption": createdPhoto.Caption,
-		"photo_url": createdPhoto.PhotoURL,
-		"user_id": createdPhoto.UserID,
-		"created_at": createdPhoto.CreatedAt,
-	})
+	ctx.JSON(http.StatusCreated, createdPhoto)
 }
 
 func (pc *photoController) GetPhotos(ctx *gin.Context) {

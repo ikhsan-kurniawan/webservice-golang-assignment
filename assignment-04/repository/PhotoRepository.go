@@ -24,7 +24,9 @@ func (pr *photoRepository) Create(newPhoto models.Photo) (models.Photo, error) {
 func (pr *photoRepository) GetAll() ([]models.Photo, error) {
 	var photos []models.Photo
 
-    if err := pr.db.Preload("User").Find(&photos).Error; err != nil {
+    if err := pr.db.Preload("User", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id, username, email, age")
+	}).Find(&photos).Error; err != nil {
         return nil, err
     }
     return photos, nil
@@ -32,7 +34,9 @@ func (pr *photoRepository) GetAll() ([]models.Photo, error) {
 
 func (pr *photoRepository) GetOne(photoId int) (models.Photo, error) {
 	var photo models.Photo
-    if err := pr.db.Preload("User").First(&photo, photoId).Error; err != nil {
+    if err := pr.db.Preload("User", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id, username, email, age")
+	}).First(&photo, photoId).Error; err != nil {
         return models.Photo{}, err
     }
     return photo, nil

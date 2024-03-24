@@ -6,10 +6,20 @@ import (
 	"mygram/repository"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
+
+type UserDTO struct {
+	ID			uint    	`json:"id"`
+	Username    string		`json:"username"`
+	Email       string		`json:"email"`
+	Age         int			`json:"age"`
+	CreatedAt 	*time.Time	`json:"created_at"`
+	UpdatedAt 	*time.Time	`json:"updated_at"`
+}
 
 type userController struct {
 	userRepository repository.IUserRepository
@@ -27,7 +37,7 @@ func (uc *userController) UserRegister(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&newUser)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"error": "bad request",
+			"error": "Bad Request",
 			"message": err.Error(),
 		})
 		return
@@ -42,12 +52,16 @@ func (uc *userController) UserRegister(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"id": registeredUser.ID,
-		"username": registeredUser.Username,
-		"email": registeredUser.Email,
-		"password": registeredUser.Password,
-	})
+	response := UserDTO {
+		ID: registeredUser.ID,
+		Username: registeredUser.Username,
+		Email: registeredUser.Email,
+		Age: registeredUser.Age,
+		CreatedAt: registeredUser.CreatedAt,
+		UpdatedAt: registeredUser.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusCreated, response)
 }
 
 func (uc *userController) UserLogin(ctx *gin.Context) {
@@ -125,13 +139,16 @@ func (uc *userController) UpdateUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"id": updatedUser.ID,
-		"email": updatedUser.Email,
-		"username": updatedUser.Username,
-		"age": updatedUser.Age,
-		"updated_at": updatedUser.UpdatedAt,
-	})
+	response := UserDTO {
+		ID: updatedUser.ID,
+		Username: updatedUser.Username,
+		Email: updatedUser.Email,
+		Age: updatedUser.Age,
+		CreatedAt: updatedUser.CreatedAt,
+		UpdatedAt: updatedUser.UpdatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, response)
 }
 
 func (uc *userController) DeleteUser(ctx *gin.Context) {
